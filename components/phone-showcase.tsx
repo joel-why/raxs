@@ -14,11 +14,11 @@ export function PhoneShowcase() {
           alt="Raxs app profile showing verified spend and luxury posts"
           className="w-[195px] sm:w-[235px] md:w-[270px] lg:w-[290px] xl:w-[320px] h-auto relative z-0 translate-x-[30%] translate-y-[8%] rotate-[9deg] mix-blend-lighten drop-shadow-2xl"
         />
-        {/* Front phone - feed screen, rotated opposite */}
+        {/* Front phone - feed screen, rotated opposite (solid, no blend so it covers the back phone) */}
         <img
           src="/images/phone-feed.png"
           alt="Raxs app feed showing trending watches, cars, and fashion"
-          className="w-[210px] sm:w-[250px] md:w-[290px] lg:w-[315px] xl:w-[345px] h-auto relative z-10 -translate-x-[28%] -translate-y-[2%] -rotate-[5deg] mix-blend-lighten drop-shadow-2xl"
+          className="w-[210px] sm:w-[250px] md:w-[290px] lg:w-[315px] xl:w-[345px] h-auto relative z-10 -translate-x-[28%] -translate-y-[2%] -rotate-[5deg] drop-shadow-2xl"
         />
       </div>
     </div>
