@@ -80,9 +80,9 @@ export function WaitlistForm() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-4">
+    <div className="w-full max-w-md space-y-4">
       {/* Social Proof */}
-      <div className="text-center">
+      <div>
         <p className="text-sm text-muted-foreground">
           Join{" "}
           <span className="text-foreground font-medium">

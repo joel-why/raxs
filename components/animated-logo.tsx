@@ -24,7 +24,7 @@ export function AnimatedLogo() {
   }, [])
 
   return (
-    <div className="relative flex items-center justify-center">
+    <div className="relative flex items-center justify-center lg:justify-start">
       {/* Pulsating white glow behind logo */}
       <div
         className="absolute inset-0 flex items-center justify-center -z-10"
@@ -43,7 +43,7 @@ export function AnimatedLogo() {
         <img
           src="/images/logo.png"
           alt="Raxs"
-          className="h-[125px] sm:h-[165px] md:h-[208px] w-auto mx-auto relative z-10 mix-blend-screen"
+          className="h-[125px] sm:h-[165px] md:h-[208px] w-auto mx-auto lg:mx-0 relative z-10 mix-blend-screen"
         />
         {/* Drawing mask - reveals from left to right */}
         <div
