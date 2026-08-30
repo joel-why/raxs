@@ -4,9 +4,12 @@ import { db } from "@/lib/db"
 import { waitlist } from "@/lib/db/schema"
 import { count } from "drizzle-orm"
 
+// Base count so the displayed number starts at 1749 and counts up from there
+const BASE_COUNT = 1749
+
 export async function getWaitlistCount(): Promise<number> {
   const result = await db.select({ count: count() }).from(waitlist)
-  return result[0]?.count ?? 0
+  return BASE_COUNT + (result[0]?.count ?? 0)
 }
 
 export async function getAllSignups(): Promise<{ id: number; name: string; email: string; createdAt: Date }[]> {
