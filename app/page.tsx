@@ -7,6 +7,7 @@ import { ReferralShare } from "@/components/referral-share"
 import { ScrollCue } from "@/components/scroll-cue"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import { SiteNav } from "@/components/site-nav"
+import { WaitlistCount } from "@/components/waitlist-count"
 import { WaitlistForm } from "@/components/waitlist-form"
 
 export default function Home() {
@@ -34,12 +35,15 @@ export default function Home() {
             </p>
           </div>
 
-          <a
-            href="#waitlist"
-            className="inline-flex items-center rounded-full bg-foreground text-background px-8 py-3.5 text-base font-medium tracking-wide transition-transform hover:scale-[1.03] active:scale-95"
-          >
-            Claim your username
-          </a>
+          <div className="flex flex-col items-center gap-4">
+            <a
+              href="#waitlist"
+              className="inline-flex items-center rounded-full bg-foreground text-background px-8 py-3.5 text-base font-medium tracking-wide transition-transform hover:scale-[1.03] active:scale-95"
+            >
+              Claim your username
+            </a>
+            <WaitlistCount />
+          </div>
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
