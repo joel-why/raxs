@@ -67,7 +67,7 @@ export function AdminDashboard({ signups, totalCount, initialAuth }: AdminDashbo
 
   return (
     <main className="min-h-screen py-12 px-4" style={{ backgroundColor: '#0a0a0a' }}>
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="space-y-2">
