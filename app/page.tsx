@@ -3,6 +3,7 @@ import { FlyingMoneyAnimation } from "@/components/flying-money"
 import { Footer } from "@/components/footer"
 import { PhoneShowcase } from "@/components/phone-showcase"
 import { ReferralLeaderboard } from "@/components/referral-leaderboard"
+import { ReferralShare } from "@/components/referral-share"
 import { ScrollCue } from "@/components/scroll-cue"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import { SiteNav } from "@/components/site-nav"
@@ -63,37 +64,39 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      {/* Section 3 — Claim your spot + Climb the ranks */}
+      {/* Section 3 — Claim your spot */}
       <section id="waitlist" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
-        <div className="w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-start gap-10 lg:gap-8">
-          {/* Left — Claim your spot */}
-          <ScrollReveal className="w-full max-w-md mx-auto flex flex-col items-center text-center">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-              Claim your spot.
-            </h2>
-            <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
-              Lock in your username before we launch. First come, first served.
-            </p>
+        <ScrollReveal className="w-full max-w-md mx-auto flex flex-col items-center text-center">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+            Claim your spot.
+          </h2>
+          <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
+            Lock in your username before we launch. First come, first served.
+          </p>
 
-            <WaitlistForm />
+          <WaitlistForm />
 
-            <p className="text-xs text-muted-foreground/60 mt-4">
-              By joining, you agree to receive updates about our launch.
-            </p>
-          </ScrollReveal>
+          <p className="text-xs text-muted-foreground/60 mt-4">
+            By joining, you agree to receive updates about our launch.
+          </p>
+        </ScrollReveal>
+      </section>
 
-          {/* Right — Climb the ranks */}
-          <ScrollReveal delay={120} className="w-full max-w-md mx-auto flex flex-col items-center text-center">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-              Climb the ranks.
-            </h2>
-            <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
-              Invite friends with your username as your referral code and unlock exclusive rewards.
-            </p>
+      {/* Section 4 — Climb the ranks */}
+      <section id="referrals" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
+        <ScrollReveal className="max-w-2xl text-center mb-10">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+            Climb the ranks.
+          </h2>
+          <p className="mt-4 text-base sm:text-lg text-muted-foreground text-balance">
+            Invite friends with your username as your referral code and unlock exclusive rewards.
+          </p>
+        </ScrollReveal>
 
-            <ReferralLeaderboard />
-          </ScrollReveal>
-        </div>
+        <ScrollReveal delay={120} className="w-full max-w-md">
+          <ReferralLeaderboard />
+          <ReferralShare />
+        </ScrollReveal>
       </section>
 
       <Footer />

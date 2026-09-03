@@ -20,6 +20,15 @@ export function WaitlistForm() {
     getWaitlistCount().then(setSignupCount)
   }, [])
 
+  // Pre-fill the referral code from a ?ref= share link
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const ref = params.get("ref")
+    if (ref) {
+      setReferral(ref.toLowerCase().replace(/\s/g, ""))
+    }
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
