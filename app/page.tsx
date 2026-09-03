@@ -27,10 +27,10 @@ export default function Home() {
 
           <div className="space-y-3">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold text-foreground tracking-tight text-balance">
-              Flex, Flaunt, Flash.
+              Your Purchases. Verified.
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl font-medium text-muted-foreground text-balance max-w-xl mx-auto">
-              The social platform for cars, fashion, watches, collectibles, &amp; more.
+              Post what you buy. Verify what you paid. Build your verified spend. Cars, fashion, watches, collectibles, &amp; more.
             </p>
           </div>
 
@@ -68,7 +68,7 @@ export default function Home() {
       <section id="waitlist" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
         <ScrollReveal className="w-full max-w-md mx-auto flex flex-col items-center text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-            Claim your spot.
+            Claim your @ before someone else does.
           </h2>
           <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
             Lock in your username before we launch. First come, first served.

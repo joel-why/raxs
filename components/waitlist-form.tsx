@@ -5,7 +5,6 @@ import { MoneyConfetti } from "./money-confetti"
 import { getWaitlistCount, joinWaitlist } from "@/app/actions/waitlist"
 
 export function WaitlistForm() {
-  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [username, setUsername] = useState("")
   const [referral, setReferral] = useState("")
@@ -33,11 +32,6 @@ export function WaitlistForm() {
     e.preventDefault()
     setError("")
 
-    if (!name.trim()) {
-      setError("Please enter your name")
-      return
-    }
-
     if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError("Please enter a valid email address")
       return
@@ -61,7 +55,7 @@ export function WaitlistForm() {
     setIsSubmitting(true)
 
     try {
-      const result = await joinWaitlist(name.trim(), email.trim(), username.trim(), referral.trim())
+      const result = await joinWaitlist(email.trim(), username.trim(), referral.trim())
       
       if (result.success) {
         setIsSubmitted(true)
@@ -119,15 +113,6 @@ export function WaitlistForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        <div>
-          <input
-            type="text"
-            placeholder="Your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 bg-input border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground/20 transition-all"
-          />
-        </div>
         <div>
           <input
             type="email"
@@ -197,7 +182,7 @@ export function WaitlistForm() {
               Joining...
             </span>
           ) : (
-            "Join the waitlist"
+            "Claim my @"
           )}
         </button>
       </form>

@@ -54,7 +54,6 @@ export async function isUsernameAvailable(username: string): Promise<boolean> {
 }
 
 export async function joinWaitlist(
-  name: string,
   email: string,
   username: string,
   referral: string
@@ -87,7 +86,7 @@ export async function joinWaitlist(
 
   try {
     await db.insert(waitlist).values({
-      name,
+      name: "",
       email,
       username: normalizedUsername,
       referral: normalizedReferral || null,
