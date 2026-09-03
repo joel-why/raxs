@@ -7,6 +7,8 @@ import { getWaitlistCount, joinWaitlist } from "@/app/actions/waitlist"
 export function WaitlistForm() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
+  const [referral, setReferral] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState("")
@@ -32,10 +34,20 @@ export function WaitlistForm() {
       return
     }
 
+    if (!username.trim()) {
+      setError("Please choose a username to claim")
+      return
+    }
+
+    if (!/^[a-z0-9_]{3,20}$/.test(username.trim())) {
+      setError("Usernames must be 3-20 characters: lowercase letters, numbers, or underscores")
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
-      const result = await joinWaitlist(name.trim(), email.trim())
+      const result = await joinWaitlist(name.trim(), email.trim(), username.trim(), referral.trim())
       
       if (result.success) {
         setIsSubmitted(true)
@@ -69,7 +81,7 @@ export function WaitlistForm() {
           </div>
           <h3 className="text-xl font-medium text-foreground">{"You're on the list!"}</h3>
           <p className="text-muted-foreground text-sm">
-            {"We'll notify you when we launch. Thanks for joining!"}
+            You claimed <span className="text-foreground font-medium">@{username}</span>. {"We'll notify you when we launch!"}
           </p>
           <p className="text-muted-foreground text-xs pt-2">
             You joined {signupCount?.toLocaleString() ?? "..."} others on the waitlist
@@ -108,6 +120,35 @@ export function WaitlistForm() {
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 bg-input border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground/20 transition-all"
+          />
+        </div>
+        <div>
+          <div className="flex items-center w-full bg-input border border-border rounded-lg focus-within:ring-1 focus-within:ring-foreground/20 transition-all">
+            <span className="pl-4 text-muted-foreground select-none">@</span>
+            <input
+              type="text"
+              inputMode="text"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              placeholder="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s/g, ""))}
+              className="w-full pl-1 pr-4 py-3 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+            />
+          </div>
+          <p className="mt-1.5 text-xs text-muted-foreground">Claim your username now</p>
+        </div>
+        <div>
+          <input
+            type="text"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            placeholder="Referral code (optional)"
+            value={referral}
+            onChange={(e) => setReferral(e.target.value.toLowerCase().replace(/\s/g, ""))}
             className="w-full px-4 py-3 bg-input border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground/20 transition-all"
           />
         </div>
