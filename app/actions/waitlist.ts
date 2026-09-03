@@ -62,6 +62,12 @@ export async function joinWaitlist(
   const normalizedUsername = username.trim().toLowerCase()
   const normalizedReferral = referral.trim().toLowerCase()
 
+  // Prevent self-referral: you can't use your own username as your referral code
+  if (normalizedReferral && normalizedReferral === normalizedUsername) {
+    const currentCount = await getWaitlistCount()
+    return { success: false, count: currentCount, error: "You can't refer yourself!" }
+  }
+
   // Pre-check so we can return a friendly, specific message before hitting the constraint
   const available = await isUsernameAvailable(normalizedUsername)
   if (!available) {

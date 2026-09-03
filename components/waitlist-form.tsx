@@ -53,6 +53,11 @@ export function WaitlistForm() {
       return
     }
 
+    if (referral.trim() && referral.trim().toLowerCase() === username.trim().toLowerCase()) {
+      setError("You can't refer yourself!")
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
