@@ -11,7 +11,7 @@ export default function Home() {
       <FlyingMoneyAnimation />
 
       <main className="flex-1 flex items-center justify-center px-6 py-12 lg:px-12">
-        <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-12 lg:gap-8">
+        <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-start gap-12 lg:gap-10">
           {/* Left Column - Content */}
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-8 order-1">
             {/* Badge */}
@@ -41,17 +41,15 @@ export default function Home() {
               <p className="text-xs text-muted-foreground/60 mt-4">
                 By joining, you agree to receive updates about our launch.
               </p>
-
-              {/* Referral leaderboard & rewards */}
-              <div className="w-full mt-8">
-                <ReferralLeaderboard />
-              </div>
             </div>
           </div>
 
-          {/* Right Column - Phone Showcase */}
-          <div className="order-2 w-full">
+          {/* Right Column - Phone Showcase + Referral tracker */}
+          <div className="order-2 w-full flex flex-col gap-10">
             <PhoneShowcase />
+
+            {/* Referral leaderboard & rewards */}
+            <ReferralLeaderboard />
           </div>
         </div>
       </main>
