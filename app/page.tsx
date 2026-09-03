@@ -63,38 +63,37 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      {/* Section 3 — Waitlist / claim username */}
+      {/* Section 3 — Claim your spot + Climb the ranks */}
       <section id="waitlist" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
-        <ScrollReveal className="w-full max-w-md flex flex-col items-center text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-            Claim your spot.
-          </h2>
-          <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
-            Lock in your username before we launch. First come, first served.
-          </p>
+        <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-start gap-16 lg:gap-12">
+          {/* Left — Claim your spot */}
+          <ScrollReveal className="w-full max-w-md mx-auto flex flex-col items-center text-center">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+              Claim your spot.
+            </h2>
+            <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
+              Lock in your username before we launch. First come, first served.
+            </p>
 
-          <WaitlistForm />
+            <WaitlistForm />
 
-          <p className="text-xs text-muted-foreground/60 mt-4">
-            By joining, you agree to receive updates about our launch.
-          </p>
-        </ScrollReveal>
-      </section>
+            <p className="text-xs text-muted-foreground/60 mt-4">
+              By joining, you agree to receive updates about our launch.
+            </p>
+          </ScrollReveal>
 
-      {/* Section 4 — Referrals */}
-      <section id="referrals" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
-        <ScrollReveal className="max-w-2xl text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-            Climb the ranks.
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground text-balance">
-            Invite friends with your username as your referral code and unlock exclusive rewards.
-          </p>
-        </ScrollReveal>
+          {/* Right — Climb the ranks */}
+          <ScrollReveal delay={120} className="w-full max-w-md mx-auto flex flex-col items-center text-center">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+              Climb the ranks.
+            </h2>
+            <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
+              Invite friends with your username as your referral code and unlock exclusive rewards.
+            </p>
 
-        <ScrollReveal delay={120} className="w-full max-w-lg">
-          <ReferralLeaderboard />
-        </ScrollReveal>
+            <ReferralLeaderboard />
+          </ScrollReveal>
+        </div>
       </section>
 
       <Footer />
