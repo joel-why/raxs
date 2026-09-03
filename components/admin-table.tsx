@@ -19,7 +19,7 @@ interface AdminTableProps {
 export function AdminTable({ signups: initialSignups }: AdminTableProps) {
   const [signups, setSignups] = useState<Signup[]>(initialSignups)
   const [search, setSearch] = useState("")
-  const [sortByReferrals, setSortByReferrals] = useState(false)
+  const [sortByReferrals, setSortByReferrals] = useState(true)
 
   // Inline editing state
   const [editingId, setEditingId] = useState<number | null>(null)
