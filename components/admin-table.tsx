@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { updateSignup } from "@/app/actions/admin"
 
 interface Signup {
   id: number
@@ -15,9 +16,46 @@ interface AdminTableProps {
   signups: Signup[]
 }
 
-export function AdminTable({ signups }: AdminTableProps) {
+export function AdminTable({ signups: initialSignups }: AdminTableProps) {
+  const [signups, setSignups] = useState<Signup[]>(initialSignups)
   const [search, setSearch] = useState("")
   const [sortByReferrals, setSortByReferrals] = useState(false)
+
+  // Inline editing state
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editEmail, setEditEmail] = useState("")
+  const [editUsername, setEditUsername] = useState("")
+  const [editError, setEditError] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
+
+  const startEditing = (signup: Signup) => {
+    setEditingId(signup.id)
+    setEditEmail(signup.email)
+    setEditUsername(signup.username ?? "")
+    setEditError("")
+  }
+
+  const cancelEditing = () => {
+    setEditingId(null)
+    setEditError("")
+  }
+
+  const saveEditing = async (id: number) => {
+    setIsSaving(true)
+    setEditError("")
+    const result = await updateSignup(id, editEmail, editUsername)
+    setIsSaving(false)
+    if (!result.success) {
+      setEditError(result.error ?? "Something went wrong")
+      return
+    }
+    setSignups((prev) =>
+      prev.map((s) =>
+        s.id === id ? { ...s, email: result.email!, username: result.username! } : s
+      )
+    )
+    setEditingId(null)
+  }
 
   // Count how many signups used each username as their referral code
   const referralCounts = new Map<string, number>()
@@ -105,13 +143,16 @@ export function AdminTable({ signups }: AdminTableProps) {
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">
                   Signed Up
                 </th>
+                <th className="text-right text-sm font-medium text-muted-foreground px-4 py-3">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {filteredSignups.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-4 py-8 text-center text-muted-foreground"
                   >
                     {signups.length === 0
@@ -132,10 +173,37 @@ export function AdminTable({ signups }: AdminTableProps) {
                       {signup.name}
                     </td>
                     <td className="px-4 py-3 text-sm text-white">
-                      {signup.email}
+                      {editingId === signup.id ? (
+                        <input
+                          type="email"
+                          value={editEmail}
+                          onChange={(e) => setEditEmail(e.target.value)}
+                          className="w-full min-w-[180px] bg-[#1a1a1a] border border-white/20 rounded px-2 py-1 text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/40"
+                        />
+                      ) : (
+                        signup.email
+                      )}
                     </td>
                     <td className="px-4 py-3 text-sm text-white">
-                      {signup.username ? `@${signup.username}` : <span className="text-muted-foreground">—</span>}
+                      {editingId === signup.id ? (
+                        <div className="flex items-center gap-1">
+                          <span className="text-muted-foreground">@</span>
+                          <input
+                            type="text"
+                            value={editUsername}
+                            onChange={(e) =>
+                              setEditUsername(
+                                e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, "").slice(0, 30)
+                              )
+                            }
+                            className="w-full min-w-[120px] bg-[#1a1a1a] border border-white/20 rounded px-2 py-1 text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/40"
+                          />
+                        </div>
+                      ) : signup.username ? (
+                        `@${signup.username}`
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-sm text-muted-foreground">
                       {signup.referral || "—"}
@@ -143,8 +211,43 @@ export function AdminTable({ signups }: AdminTableProps) {
                     <td className="px-4 py-3 text-sm text-white font-medium">
                       {getReferralCount(signup.username)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">
+                    <td className="px-4 py-3 text-sm text-muted-foreground whitespace-nowrap">
                       {formatDate(signup.createdAt)}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-right whitespace-nowrap">
+                      {editingId === signup.id ? (
+                        <div className="flex flex-col items-end gap-1">
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => saveEditing(signup.id)}
+                              disabled={isSaving}
+                              className="text-white bg-white/10 hover:bg-white/20 disabled:opacity-50 rounded px-3 py-1 text-xs font-medium transition-colors"
+                            >
+                              {isSaving ? "Saving..." : "Save"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={cancelEditing}
+                              disabled={isSaving}
+                              className="text-muted-foreground hover:text-white rounded px-3 py-1 text-xs font-medium transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                          {editError && (
+                            <span className="text-xs text-red-400 text-right max-w-[220px]">{editError}</span>
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => startEditing(signup)}
+                          className="text-muted-foreground hover:text-white rounded px-3 py-1 text-xs font-medium transition-colors"
+                        >
+                          Edit
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))
