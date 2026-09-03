@@ -29,7 +29,7 @@ export default function Home() {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold text-foreground tracking-tight text-balance">
               Your Purchases. Verified.
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl font-medium text-muted-foreground text-balance max-w-xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl font-medium text-muted-foreground text-pretty max-w-3xl mx-auto">
               Post what you buy. Verify what you paid. Build your verified spend. Cars, fashion, watches, collectibles, &amp; more.
             </p>
           </div>
