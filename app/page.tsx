@@ -51,11 +51,11 @@ export default function Home() {
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24">
         <ScrollReveal className="max-w-2xl text-center mb-14">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-            A feed built to flex.
+            If you bought it, post it.
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground text-balance">
-            Show off what you own, discover what&apos;s trending, and follow the culture across cars, fashion,
-            watches, and collectibles.
+            Supercars or sneakers. Coffee or Cartier. Every purchase adds to your profile. Verify your purchases
+            to build your Verified Spend no matter the item.
           </p>
         </ScrollReveal>
 
