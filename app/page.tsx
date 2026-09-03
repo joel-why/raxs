@@ -55,7 +55,7 @@ export default function Home() {
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground text-balance">
             Supercars or sneakers. Coffee or Cartier. Every purchase adds to your profile. Verify your purchases
-            to build your Verified Spend no matter the item.
+            to build your Verified Spend, no matter the item.
           </p>
         </ScrollReveal>
 
