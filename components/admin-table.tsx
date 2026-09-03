@@ -6,6 +6,8 @@ interface Signup {
   id: number
   name: string
   email: string
+  username: string | null
+  referral: string | null
   createdAt: Date
 }
 
@@ -19,7 +21,8 @@ export function AdminTable({ signups }: AdminTableProps) {
   const filteredSignups = signups.filter(
     (s) =>
       s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.email.toLowerCase().includes(search.toLowerCase())
+      s.email.toLowerCase().includes(search.toLowerCase()) ||
+      (s.username?.toLowerCase().includes(search.toLowerCase()) ?? false)
   )
 
   const formatDate = (date: Date) => {
@@ -38,7 +41,7 @@ export function AdminTable({ signups }: AdminTableProps) {
       <div className="flex items-center gap-4">
         <input
           type="text"
-          placeholder="Search by name or email..."
+          placeholder="Search by name, email, or username..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 bg-[#1a1a1a] border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-white/20"
@@ -64,6 +67,12 @@ export function AdminTable({ signups }: AdminTableProps) {
                   Email
                 </th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">
+                  Username
+                </th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">
+                  Referral
+                </th>
+                <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">
                   Signed Up
                 </th>
               </tr>
@@ -72,7 +81,7 @@ export function AdminTable({ signups }: AdminTableProps) {
               {filteredSignups.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={6}
                     className="px-4 py-8 text-center text-muted-foreground"
                   >
                     {signups.length === 0
@@ -94,6 +103,12 @@ export function AdminTable({ signups }: AdminTableProps) {
                     </td>
                     <td className="px-4 py-3 text-sm text-white">
                       {signup.email}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-white">
+                      {signup.username ? `@${signup.username}` : <span className="text-muted-foreground">—</span>}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
+                      {signup.referral || "—"}
                     </td>
                     <td className="px-4 py-3 text-sm text-muted-foreground">
                       {formatDate(signup.createdAt)}

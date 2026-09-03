@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable}`} style={{ backgroundColor: '#0a0a0a' }}>
+    <html lang="en" className={`${spaceGrotesk.variable} scroll-smooth`} style={{ backgroundColor: '#0a0a0a' }}>
       <body className="font-sans antialiased min-h-screen" style={{ backgroundColor: '#0a0a0a', color: '#fafafa' }}>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

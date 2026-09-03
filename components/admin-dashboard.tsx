@@ -7,7 +7,14 @@ import { AdminTable } from '@/components/admin-table'
 import { Button } from '@/components/ui/button'
 
 interface AdminDashboardProps {
-  signups: { id: number; name: string; email: string; createdAt: Date }[]
+  signups: {
+    id: number
+    name: string
+    email: string
+    username: string | null
+    referral: string | null
+    createdAt: Date
+  }[]
   totalCount: number
   initialAuth: boolean
 }
@@ -37,10 +44,12 @@ export function AdminDashboard({ signups, totalCount, initialAuth }: AdminDashbo
   }
 
   const handleExportCSV = () => {
-    const headers = ['Name', 'Email', 'Signed Up']
+    const headers = ['Name', 'Email', 'Username', 'Referral', 'Signed Up']
     const rows = signups.map(s => [
       s.name,
       s.email,
+      s.username ? `@${s.username}` : '',
+      s.referral ?? '',
       new Date(s.createdAt).toLocaleString()
     ])
     

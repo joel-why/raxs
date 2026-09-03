@@ -107,6 +107,24 @@
   }
 }
 
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+}
+
+.animate-scroll-dot {
+  animation: scroll-dot 1.8s ease-in-out infinite;
+}
+
 @keyframes pulse-glow {
   0%, 100% {
     transform: translate(-50%, -50%) scale(1);
