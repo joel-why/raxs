@@ -2,6 +2,7 @@ import { AnimatedLogo } from "@/components/animated-logo"
 import { FlyingMoneyAnimation } from "@/components/flying-money"
 import { Footer } from "@/components/footer"
 import { PhoneShowcase } from "@/components/phone-showcase"
+import { ReferralLeaderboard } from "@/components/referral-leaderboard"
 import { WaitlistForm } from "@/components/waitlist-form"
 
 export default function Home() {
@@ -40,6 +41,11 @@ export default function Home() {
               <p className="text-xs text-muted-foreground/60 mt-4">
                 By joining, you agree to receive updates about our launch.
               </p>
+
+              {/* Referral leaderboard & rewards */}
+              <div className="w-full mt-8">
+                <ReferralLeaderboard />
+              </div>
             </div>
           </div>
 

@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { waitlist } from "@/lib/db/schema"
-import { count, eq } from "drizzle-orm"
+import { count, desc, eq, isNotNull } from "drizzle-orm"
 
 // Base count so the displayed number starts at 1749 and counts up from there
 const BASE_COUNT = 1749
@@ -26,6 +26,20 @@ export async function getAllSignups(): Promise<
       createdAt: row.createdAt!,
     }))
     .reverse()
+}
+
+export async function getTopReferrers(): Promise<{ username: string; referrals: number }[]> {
+  const result = await db
+    .select({ username: waitlist.referral, referrals: count() })
+    .from(waitlist)
+    .where(isNotNull(waitlist.referral))
+    .groupBy(waitlist.referral)
+    .orderBy(desc(count()))
+    .limit(3)
+
+  return result
+    .filter((row): row is { username: string; referrals: number } => Boolean(row.username))
+    .map((row) => ({ username: row.username, referrals: Number(row.referrals) }))
 }
 
 export async function isUsernameAvailable(username: string): Promise<boolean> {
