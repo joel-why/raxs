@@ -62,6 +62,22 @@ export async function joinWaitlist(
   const normalizedUsername = username.trim().toLowerCase()
   const normalizedReferral = referral.trim().toLowerCase()
 
+  // Validate username format: 3-30 chars, lowercase letters, numbers, periods, underscores
+  if (!/^[a-z0-9._]{3,30}$/.test(normalizedUsername)) {
+    const currentCount = await getWaitlistCount()
+    return {
+      success: false,
+      count: currentCount,
+      error: "Usernames must be 3-30 characters: lowercase letters, numbers, periods, or underscores",
+    }
+  }
+
+  // Prevent self-referral: you can't use your own username as your referral code
+  if (normalizedReferral && normalizedReferral === normalizedUsername) {
+    const currentCount = await getWaitlistCount()
+    return { success: false, count: currentCount, error: "You can't refer yourself!" }
+  }
+
   // Pre-check so we can return a friendly, specific message before hitting the constraint
   const available = await isUsernameAvailable(normalizedUsername)
   if (!available) {
