@@ -138,7 +138,7 @@ export function WaitlistForm() {
             />
           </div>
           <p className="mt-1.5 text-xs text-muted-foreground">
-            Claim your username now | This will also be your referral code
+            This will also be your referral code
           </p>
         </div>
         <div>
