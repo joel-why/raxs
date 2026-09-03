@@ -25,7 +25,7 @@ export function WaitlistForm() {
     const params = new URLSearchParams(window.location.search)
     const ref = params.get("ref")
     if (ref) {
-      setReferral(ref.toLowerCase().replace(/\s/g, ""))
+      setReferral(ref.toLowerCase().replace(/[^a-z0-9._]/g, "").slice(0, 30))
     }
   }, [])
 
@@ -48,8 +48,8 @@ export function WaitlistForm() {
       return
     }
 
-    if (!/^[a-z0-9_]{3,20}$/.test(username.trim())) {
-      setError("Usernames must be 3-20 characters: lowercase letters, numbers, or underscores")
+    if (!/^[a-z0-9._]{3,30}$/.test(username.trim())) {
+      setError("Usernames must be 3-30 characters: lowercase letters, numbers, periods, or underscores")
       return
     }
 
@@ -148,7 +148,7 @@ export function WaitlistForm() {
               spellCheck={false}
               placeholder="username"
               value={username}
-              onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s/g, ""))}
+              onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, "").slice(0, 30))}
               className="w-full pl-1 pr-4 py-3 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
             />
           </div>
@@ -164,7 +164,7 @@ export function WaitlistForm() {
             spellCheck={false}
             placeholder="Referral code (optional)"
             value={referral}
-            onChange={(e) => setReferral(e.target.value.toLowerCase().replace(/\s/g, ""))}
+            onChange={(e) => setReferral(e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, "").slice(0, 30))}
             className="w-full px-4 py-3 bg-input border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground/20 transition-all"
           />
         </div>
