@@ -31,7 +31,7 @@ export function SiteNav() {
           href="#waitlist"
           className="inline-flex items-center rounded-full bg-foreground text-background px-5 py-2 text-sm font-medium tracking-wide transition-transform hover:scale-[1.03] active:scale-95"
         >
-          Join waitlist
+          Claim my @
         </a>
       </div>
     </header>

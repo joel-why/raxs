@@ -7,6 +7,7 @@ import { ReferralShare } from "@/components/referral-share"
 import { ScrollCue } from "@/components/scroll-cue"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import { SiteNav } from "@/components/site-nav"
+import { WaitlistCount } from "@/components/waitlist-count"
 import { WaitlistForm } from "@/components/waitlist-form"
 
 export default function Home() {
@@ -27,19 +28,22 @@ export default function Home() {
 
           <div className="space-y-3">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold text-foreground tracking-tight text-balance">
-              Flex, Flaunt, Flash.
+              Your Purchases. Verified.
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl font-medium text-muted-foreground text-balance max-w-xl mx-auto">
-              The social platform for cars, fashion, watches, collectibles, &amp; more.
+            <p className="text-lg sm:text-xl md:text-2xl font-medium text-muted-foreground text-pretty max-w-3xl mx-auto">
+              Post what you buy. Verify what you paid. Build your verified spend. Cars, fashion, watches, collectibles, &amp; more.
             </p>
           </div>
 
-          <a
-            href="#waitlist"
-            className="inline-flex items-center rounded-full bg-foreground text-background px-8 py-3.5 text-base font-medium tracking-wide transition-transform hover:scale-[1.03] active:scale-95"
-          >
-            Claim your username
-          </a>
+          <div className="flex flex-col items-center gap-4">
+            <a
+              href="#waitlist"
+              className="inline-flex items-center rounded-full bg-foreground text-background px-8 py-3.5 text-base font-medium tracking-wide transition-transform hover:scale-[1.03] active:scale-95"
+            >
+              Claim your username
+            </a>
+            <WaitlistCount />
+          </div>
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
@@ -51,11 +55,11 @@ export default function Home() {
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24">
         <ScrollReveal className="max-w-2xl text-center mb-14">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-            A feed built to flex.
+            If you bought it, post it.
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground text-balance">
-            Show off what you own, discover what&apos;s trending, and follow the culture across cars, fashion,
-            watches, and collectibles.
+            Supercars or sneakers. Coffee or Cartier. Every purchase adds to your profile. Verify your purchases
+            to build your Verified Spend, no matter the item.
           </p>
         </ScrollReveal>
 
@@ -68,7 +72,7 @@ export default function Home() {
       <section id="waitlist" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
         <ScrollReveal className="w-full max-w-md mx-auto flex flex-col items-center text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-            Claim your spot.
+            Claim your @ before someone else does.
           </h2>
           <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
             Lock in your username before we launch. First come, first served.

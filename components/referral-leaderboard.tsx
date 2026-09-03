@@ -6,9 +6,10 @@ import { getTopReferrers } from "@/app/actions/waitlist"
 type Referrer = { username: string; referrals: number }
 
 const REWARDS = [
-  { count: 1, label: "Reserve your username" },
+  { count: 1, label: "Move up a spot" },
   { count: 3, label: "Early access" },
   { count: 5, label: "Exclusive founding member badge" },
+  { count: 10, label: "Exclusive profile theme" },
 ]
 
 const RANK_STYLES = [
