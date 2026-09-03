@@ -17,6 +17,18 @@ interface AdminTableProps {
 
 export function AdminTable({ signups }: AdminTableProps) {
   const [search, setSearch] = useState("")
+  const [sortByReferrals, setSortByReferrals] = useState(false)
+
+  // Count how many signups used each username as their referral code
+  const referralCounts = new Map<string, number>()
+  for (const s of signups) {
+    if (s.referral) {
+      const ref = s.referral.toLowerCase()
+      referralCounts.set(ref, (referralCounts.get(ref) ?? 0) + 1)
+    }
+  }
+  const getReferralCount = (username: string | null) =>
+    username ? (referralCounts.get(username.toLowerCase()) ?? 0) : 0
 
   const filteredSignups = signups.filter(
     (s) =>
@@ -24,6 +36,12 @@ export function AdminTable({ signups }: AdminTableProps) {
       s.email.toLowerCase().includes(search.toLowerCase()) ||
       (s.username?.toLowerCase().includes(search.toLowerCase()) ?? false)
   )
+
+  const sortedSignups = sortByReferrals
+    ? [...filteredSignups].sort(
+        (a, b) => getReferralCount(b.username) - getReferralCount(a.username)
+      )
+    : filteredSignups
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -72,6 +90,18 @@ export function AdminTable({ signups }: AdminTableProps) {
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">
                   Referral
                 </th>
+                <th className="text-left px-4 py-3">
+                  <button
+                    type="button"
+                    onClick={() => setSortByReferrals((v) => !v)}
+                    className={`inline-flex items-center gap-1 text-sm font-medium transition-colors ${
+                      sortByReferrals ? "text-white" : "text-muted-foreground hover:text-white"
+                    }`}
+                  >
+                    Referrals
+                    <span className="text-xs">{sortByReferrals ? "↓" : "⇅"}</span>
+                  </button>
+                </th>
                 <th className="text-left text-sm font-medium text-muted-foreground px-4 py-3">
                   Signed Up
                 </th>
@@ -81,7 +111,7 @@ export function AdminTable({ signups }: AdminTableProps) {
               {filteredSignups.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="px-4 py-8 text-center text-muted-foreground"
                   >
                     {signups.length === 0
@@ -90,7 +120,7 @@ export function AdminTable({ signups }: AdminTableProps) {
                   </td>
                 </tr>
               ) : (
-                filteredSignups.map((signup, index) => (
+                sortedSignups.map((signup, index) => (
                   <tr
                     key={signup.id}
                     className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors"
@@ -109,6 +139,9 @@ export function AdminTable({ signups }: AdminTableProps) {
                     </td>
                     <td className="px-4 py-3 text-sm text-muted-foreground">
                       {signup.referral || "—"}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-white font-medium">
+                      {getReferralCount(signup.username)}
                     </td>
                     <td className="px-4 py-3 text-sm text-muted-foreground">
                       {formatDate(signup.createdAt)}
