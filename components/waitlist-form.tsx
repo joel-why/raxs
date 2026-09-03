@@ -138,7 +138,9 @@ export function WaitlistForm() {
               className="w-full pl-1 pr-4 py-3 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
             />
           </div>
-          <p className="mt-1.5 text-xs text-muted-foreground">Claim your username now</p>
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            Claim your username now | This will also be your referral code
+          </p>
         </div>
         <div>
           <input
