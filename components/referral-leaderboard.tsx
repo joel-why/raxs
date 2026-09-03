@@ -27,7 +27,7 @@ export function ReferralLeaderboard() {
   return (
     <section
       aria-label="Referral leaderboard and rewards"
-      className="w-full max-w-md rounded-xl border border-border bg-card/50 backdrop-blur-sm p-5 space-y-6"
+      className="w-full max-w-md mx-auto rounded-xl border border-border bg-card/50 backdrop-blur-sm p-5 space-y-6"
     >
       {/* Top referrers */}
       <div className="space-y-3">
