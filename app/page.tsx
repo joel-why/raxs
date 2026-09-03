@@ -3,6 +3,7 @@ import { FlyingMoneyAnimation } from "@/components/flying-money"
 import { Footer } from "@/components/footer"
 import { PhoneShowcase } from "@/components/phone-showcase"
 import { ReferralLeaderboard } from "@/components/referral-leaderboard"
+import { ReferralShare } from "@/components/referral-share"
 import { ScrollCue } from "@/components/scroll-cue"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import { SiteNav } from "@/components/site-nav"
@@ -63,9 +64,9 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      {/* Section 3 — Waitlist / claim username */}
+      {/* Section 3 — Claim your spot */}
       <section id="waitlist" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
-        <ScrollReveal className="w-full max-w-md flex flex-col items-center text-center">
+        <ScrollReveal className="w-full max-w-md mx-auto flex flex-col items-center text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
             Claim your spot.
           </h2>
@@ -81,7 +82,7 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      {/* Section 4 — Referrals */}
+      {/* Section 4 — Climb the ranks */}
       <section id="referrals" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
         <ScrollReveal className="max-w-2xl text-center mb-10">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
@@ -92,8 +93,9 @@ export default function Home() {
           </p>
         </ScrollReveal>
 
-        <ScrollReveal delay={120} className="w-full max-w-lg">
+        <ScrollReveal delay={120} className="w-full max-w-md">
           <ReferralLeaderboard />
+          <ReferralShare />
         </ScrollReveal>
       </section>
 
