@@ -21,19 +21,35 @@ export default function PrivacyPolicy() {
         <div className="space-y-6 text-muted-foreground">
           <section className="space-y-3">
             <h2 className="text-xl font-medium text-foreground">Information We Collect</h2>
-            <p>
-              When you sign up for our waitlist, we collect your name and email address. This information is used solely to notify you about our launch and provide updates about our service.
-            </p>
+            <p>When you sign up for our waitlist, we collect the following information:</p>
+            <ul className="list-disc list-inside space-y-1 ml-4">
+              <li><span className="text-foreground">Name</span> — used to personalize our communications with you.</li>
+              <li><span className="text-foreground">Email address</span> — used to notify you about our launch and send updates.</li>
+              <li>
+                <span className="text-foreground">Username</span> — the handle you reserve on the waitlist. This is stored in lowercase and doubles as your referral code.
+              </li>
+              <li>
+                <span className="text-foreground">Referral code</span> — if you were referred, we store the username of the person who referred you so we can credit their referrals.
+              </li>
+            </ul>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-xl font-medium text-foreground">How We Use Your Information</h2>
             <p>We use the information we collect to:</p>
             <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Send you updates about our launch</li>
-              <li>Notify you of important announcements</li>
+              <li>Send you updates about our launch and important announcements</li>
+              <li>Reserve and hold the username you claimed</li>
+              <li>Track referrals and determine referral-based rewards, such as early access and founding member status</li>
               <li>Communicate with you about our services</li>
             </ul>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-medium text-foreground">Public Leaderboard</h2>
+            <p>
+              To power our referral program, we display a public leaderboard of the top referrers. This leaderboard shows usernames and referral counts only — it never displays your name, email address, or any other personal information.
+            </p>
           </section>
 
           <section className="space-y-3">
