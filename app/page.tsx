@@ -65,7 +65,7 @@ export default function Home() {
 
       {/* Section 3 — Claim your spot + Climb the ranks */}
       <section id="waitlist" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
-        <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-start gap-16 lg:gap-12">
+        <div className="w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-start gap-10 lg:gap-8">
           {/* Left — Claim your spot */}
           <ScrollReveal className="w-full max-w-md mx-auto flex flex-col items-center text-center">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
