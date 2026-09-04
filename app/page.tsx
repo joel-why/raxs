@@ -8,6 +8,7 @@ import { ScrollCue } from "@/components/scroll-cue"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import { SiteNav } from "@/components/site-nav"
 import { WaitlistCount } from "@/components/waitlist-count"
+import { WaitlistPosition } from "@/components/waitlist-position"
 import { WaitlistForm } from "@/components/waitlist-form"
 
 export default function Home() {
@@ -106,7 +107,10 @@ export default function Home() {
               <ReferralTiers />
               <ReferralShare />
             </div>
-            <TopReferrers />
+            <div className="space-y-4">
+              <TopReferrers />
+              <WaitlistPosition />
+            </div>
           </div>
         </ScrollReveal>
       </section>
