@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { waitlist } from "@/lib/db/schema"
-import { count, desc, eq, isNotNull, lte, or } from "drizzle-orm"
+import { count, desc, eq, isNotNull } from "drizzle-orm"
 
 export async function getWaitlistCount(): Promise<number> {
   const result = await db.select({ count: count() }).from(waitlist)
@@ -25,35 +25,71 @@ export async function getAllSignups(): Promise<
     .reverse()
 }
 
-export async function getWaitlistPosition(
-  query: string
-): Promise<{ found: boolean; position?: number; total?: number; username?: string | null }> {
+// Builds the full waitlist ordering. Everyone starts ranked by signup order
+// (earliest = #1), then each referral a user has earned moves them up one spot,
+// jumping the person directly ahead. When an adjusted score ties, the person
+// who climbed there via referrals wins the higher spot.
+async function getRankedWaitlist(): Promise<
+  { id: number; username: string | null; email: string; referrals: number }[]
+> {
+  const rows = await db
+    .select({
+      id: waitlist.id,
+      username: waitlist.username,
+      email: waitlist.email,
+      referral: waitlist.referral,
+    })
+    .from(waitlist)
+    .orderBy(waitlist.id)
+
+  // Tally how many people each username has referred
+  const referralCounts = new Map<string, number>()
+  for (const row of rows) {
+    if (row.referral) referralCounts.set(row.referral, (referralCounts.get(row.referral) ?? 0) + 1)
+  }
+
+  return rows
+    .map((row, index) => {
+      const referrals = row.username ? referralCounts.get(row.username) ?? 0 : 0
+      return {
+        id: row.id,
+        username: row.username,
+        email: row.email,
+        referrals,
+        basePosition: index + 1,
+        score: index + 1 - referrals,
+      }
+    })
+    .sort((a, b) => {
+      if (a.score !== b.score) return a.score - b.score
+      if (a.referrals !== b.referrals) return b.referrals - a.referrals
+      return a.basePosition - b.basePosition
+    })
+    .map(({ id, username, email, referrals }) => ({ id, username, email, referrals }))
+}
+
+export async function getWaitlistPosition(query: string): Promise<{
+  found: boolean
+  position?: number
+  total?: number
+  username?: string | null
+  referrals?: number
+}> {
   const normalized = query.trim().toLowerCase().replace(/^@/, "")
   if (!normalized) return { found: false }
 
-  // Look up by username or email so people can check with either one.
-  // Rank by the serial id (monotonic with signup order) rather than the
-  // timestamp — Postgres stores microseconds but JS Date truncates to ms,
-  // which would drop the row itself from a created_at comparison.
-  const match = await db
-    .select({ id: waitlist.id, username: waitlist.username })
-    .from(waitlist)
-    .where(or(eq(waitlist.username, normalized), eq(waitlist.email, normalized)))
-    .limit(1)
-
-  const entry = match[0]
-  if (!entry) return { found: false }
-
-  // Position is 1-based by signup order: the earliest signup is #1
-  const ahead = await db.select({ count: count() }).from(waitlist).where(lte(waitlist.id, entry.id))
-
-  const total = await getWaitlistCount()
+  const ranked = await getRankedWaitlist()
+  const index = ranked.findIndex(
+    (row) => row.username === normalized || row.email.toLowerCase() === normalized
+  )
+  if (index === -1) return { found: false }
 
   return {
     found: true,
-    position: ahead[0]?.count ?? 1,
-    total,
-    username: entry.username,
+    position: index + 1,
+    total: ranked.length,
+    username: ranked[index].username,
+    referrals: ranked[index].referrals,
   }
 }
 
