@@ -68,6 +68,22 @@ export function AdminTable({ signups: initialSignups }: AdminTableProps) {
   const getReferralCount = (username: string | null) =>
     username ? (referralCounts.get(username.toLowerCase()) ?? 0) : 0
 
+  // Compute each signup's true waitlist position: signup order (by id) adjusted
+  // by referrals — each referral moves a user up one spot, jumping the person
+  // directly ahead. This mirrors the public "Check your spot" checker.
+  const positionById = new Map<number, number>()
+  ;[...signups]
+    .sort((a, b) => a.id - b.id)
+    .map((s, index) => ({ id: s.id, referrals: getReferralCount(s.username), basePosition: index + 1 }))
+    .sort((a, b) => {
+      const scoreA = a.basePosition - a.referrals
+      const scoreB = b.basePosition - b.referrals
+      if (scoreA !== scoreB) return scoreA - scoreB
+      if (a.referrals !== b.referrals) return b.referrals - a.referrals
+      return a.basePosition - b.basePosition
+    })
+    .forEach((s, index) => positionById.set(s.id, index + 1))
+
   const filteredSignups = signups.filter(
     (s) =>
       s.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -161,13 +177,13 @@ export function AdminTable({ signups: initialSignups }: AdminTableProps) {
                   </td>
                 </tr>
               ) : (
-                sortedSignups.map((signup, index) => (
+                sortedSignups.map((signup) => (
                   <tr
                     key={signup.id}
                     className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors"
                   >
                     <td className="px-4 py-3 text-sm text-muted-foreground">
-                      {signups.length - signups.findIndex((s) => s.id === signup.id)}
+                      {positionById.get(signup.id)}
                     </td>
                     <td className="px-4 py-3 text-sm text-white">
                       {signup.name}
