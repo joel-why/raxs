@@ -27,7 +27,7 @@ export default function Home() {
           <AnimatedLogo />
 
           <div className="space-y-3">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold text-foreground tracking-tight text-balance">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold uppercase text-foreground tracking-tight leading-[0.95] text-balance">
               Your Purchases. Verified.
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl font-medium text-muted-foreground text-pretty max-w-3xl mx-auto">
@@ -54,7 +54,7 @@ export default function Home() {
       {/* Section 2 — Showcase */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24">
         <ScrollReveal className="max-w-2xl text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold uppercase text-foreground tracking-tight leading-[0.95] text-balance">
             If you bought it, post it.
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground text-balance">
@@ -71,7 +71,7 @@ export default function Home() {
       {/* Section 3 — Claim your spot */}
       <section id="waitlist" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
         <ScrollReveal className="w-full max-w-md mx-auto flex flex-col items-center text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold uppercase text-foreground tracking-tight leading-[0.95] text-balance">
             Claim your @ before someone else does.
           </h2>
           <p className="mt-4 mb-8 text-base sm:text-lg text-muted-foreground text-balance">
