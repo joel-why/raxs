@@ -2,7 +2,7 @@ import { AnimatedLogo } from "@/components/animated-logo"
 import { FlyingMoneyAnimation } from "@/components/flying-money"
 import { Footer } from "@/components/footer"
 import { PhoneShowcase } from "@/components/phone-showcase"
-import { ReferralLeaderboard } from "@/components/referral-leaderboard"
+import { ReferralTiers, TopReferrers } from "@/components/referral-leaderboard"
 import { ReferralShare } from "@/components/referral-share"
 import { ScrollCue } from "@/components/scroll-cue"
 import { ScrollReveal } from "@/components/scroll-reveal"
@@ -88,7 +88,7 @@ export default function Home() {
 
       {/* Section 4 — Climb the ranks */}
       <section id="referrals" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
-        <ScrollReveal className="w-full max-w-md mx-auto mb-8">
+        <ScrollReveal className="w-full max-w-5xl mx-auto mb-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             Move up the waitlist
           </p>
@@ -100,9 +100,14 @@ export default function Home() {
           </p>
         </ScrollReveal>
 
-        <ScrollReveal delay={120} className="w-full max-w-md">
-          <ReferralLeaderboard />
-          <ReferralShare />
+        <ScrollReveal delay={120} className="w-full max-w-5xl mx-auto">
+          <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+            <div className="space-y-4">
+              <ReferralTiers />
+              <ReferralShare />
+            </div>
+            <TopReferrers />
+          </div>
         </ScrollReveal>
       </section>
 

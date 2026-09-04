@@ -112,7 +112,37 @@ const RANK_STYLES = [
   "text-muted-foreground/70",
 ]
 
-export function ReferralLeaderboard() {
+export function ReferralTiers() {
+  return (
+    <ul aria-label="Referral rewards" className="space-y-3">
+      {TIERS.map((tier) => (
+        <li
+          key={tier.title}
+          className="flex items-center gap-4 rounded-xl border border-border bg-card/50 backdrop-blur-sm px-4 py-4 transition-colors hover:bg-card/80"
+        >
+          <span
+            className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-current/30 bg-secondary/60 ${tier.accent}`}
+          >
+            <TierIcon name={tier.icon} className="h-5 w-5" />
+          </span>
+
+          <span className="min-w-0 flex-1">
+            <span className="block text-base font-semibold text-foreground leading-tight">{tier.title}</span>
+            <span className="block text-sm text-muted-foreground leading-tight">{tier.subtitle}</span>
+          </span>
+
+          <span
+            className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-wide ${tier.badgeClass}`}
+          >
+            {tier.badge}
+          </span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+export function TopReferrers() {
   const [referrers, setReferrers] = useState<Referrer[] | null>(null)
 
   useEffect(() => {
@@ -120,78 +150,45 @@ export function ReferralLeaderboard() {
   }, [])
 
   return (
-    <section aria-label="Referral leaderboard and rewards" className="w-full max-w-md mx-auto space-y-4">
-      {/* Top referrers */}
-      <div className="space-y-3 rounded-xl border border-border bg-card/50 backdrop-blur-sm p-5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium text-foreground tracking-wide">Top referrers</h2>
-          <span className="text-xs text-muted-foreground">Refer to climb</span>
-        </div>
-
-        <ol className="space-y-2">
-          {referrers === null ? (
-            Array.from({ length: 3 }).map((_, i) => (
-              <li
-                key={i}
-                className="flex items-center justify-between rounded-lg bg-input/50 px-3 py-2 animate-pulse"
-              >
-                <span className="h-4 w-24 rounded bg-border" />
-                <span className="h-4 w-12 rounded bg-border" />
-              </li>
-            ))
-          ) : referrers.length === 0 ? (
-            <li className="rounded-lg bg-input/50 px-3 py-3 text-center text-xs text-muted-foreground">
-              No referrals yet — be the first to share your code!
-            </li>
-          ) : (
-            referrers.map((r, i) => (
-              <li
-                key={r.username}
-                className="flex items-center justify-between rounded-lg bg-input/50 px-3 py-2"
-              >
-                <span className="flex items-center gap-3">
-                  <span
-                    className={`inline-flex h-6 w-6 items-center justify-center rounded-full border border-border text-xs font-semibold ${RANK_STYLES[i] ?? "text-muted-foreground"}`}
-                  >
-                    {i + 1}
-                  </span>
-                  <span className="text-sm font-medium text-foreground">@{r.username}</span>
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {r.referrals} {r.referrals === 1 ? "referral" : "referrals"}
-                </span>
-              </li>
-            ))
-          )}
-        </ol>
+    <div
+      aria-label="Top referrers"
+      className="space-y-3 rounded-xl border border-border bg-card/50 backdrop-blur-sm p-5"
+    >
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-medium text-foreground tracking-wide">Top referrers</h2>
+        <span className="text-xs text-muted-foreground">Refer to climb</span>
       </div>
 
-      {/* Reward tiers */}
-      <ul className="space-y-3">
-        {TIERS.map((tier) => (
-          <li
-            key={tier.title}
-            className="flex items-center gap-4 rounded-xl border border-border bg-card/50 backdrop-blur-sm px-4 py-4 transition-colors hover:bg-card/80"
-          >
-            <span
-              className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-current/30 bg-secondary/60 ${tier.accent}`}
-            >
-              <TierIcon name={tier.icon} className="h-5 w-5" />
-            </span>
-
-            <span className="min-w-0 flex-1">
-              <span className="block text-base font-semibold text-foreground leading-tight">{tier.title}</span>
-              <span className="block text-sm text-muted-foreground leading-tight">{tier.subtitle}</span>
-            </span>
-
-            <span
-              className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-wide ${tier.badgeClass}`}
-            >
-              {tier.badge}
-            </span>
+      <ol className="space-y-2">
+        {referrers === null ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <li key={i} className="flex items-center justify-between rounded-lg bg-input/50 px-3 py-2 animate-pulse">
+              <span className="h-4 w-24 rounded bg-border" />
+              <span className="h-4 w-12 rounded bg-border" />
+            </li>
+          ))
+        ) : referrers.length === 0 ? (
+          <li className="rounded-lg bg-input/50 px-3 py-3 text-center text-xs text-muted-foreground">
+            No referrals yet — be the first to share your code!
           </li>
-        ))}
-      </ul>
-    </section>
+        ) : (
+          referrers.map((r, i) => (
+            <li key={r.username} className="flex items-center justify-between rounded-lg bg-input/50 px-3 py-2">
+              <span className="flex items-center gap-3">
+                <span
+                  className={`inline-flex h-6 w-6 items-center justify-center rounded-full border border-border text-xs font-semibold ${RANK_STYLES[i] ?? "text-muted-foreground"}`}
+                >
+                  {i + 1}
+                </span>
+                <span className="text-sm font-medium text-foreground">@{r.username}</span>
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {r.referrals} {r.referrals === 1 ? "referral" : "referrals"}
+              </span>
+            </li>
+          ))
+        )}
+      </ol>
+    </div>
   )
 }
