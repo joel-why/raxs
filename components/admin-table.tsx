@@ -19,7 +19,7 @@ interface AdminTableProps {
 export function AdminTable({ signups: initialSignups }: AdminTableProps) {
   const [signups, setSignups] = useState<Signup[]>(initialSignups)
   const [search, setSearch] = useState("")
-  const [sortByReferrals, setSortByReferrals] = useState(true)
+  const [sortByReferrals, setSortByReferrals] = useState(false)
 
   // Inline editing state
   const [editingId, setEditingId] = useState<number | null>(null)
@@ -95,7 +95,9 @@ export function AdminTable({ signups: initialSignups }: AdminTableProps) {
     ? [...filteredSignups].sort(
         (a, b) => getReferralCount(b.username) - getReferralCount(a.username)
       )
-    : filteredSignups
+    : [...filteredSignups].sort(
+        (a, b) => (positionById.get(a.id) ?? 0) - (positionById.get(b.id) ?? 0)
+      )
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("en-US", {
