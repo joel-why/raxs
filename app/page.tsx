@@ -88,12 +88,15 @@ export default function Home() {
 
       {/* Section 4 — Climb the ranks */}
       <section id="referrals" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 scroll-mt-20">
-        <ScrollReveal className="max-w-2xl text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground tracking-tight text-balance">
-            Climb the ranks.
+        <ScrollReveal className="w-full max-w-md mx-auto mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            Move up the waitlist
+          </p>
+          <h2 className="mt-3 text-4xl sm:text-5xl font-bold uppercase text-foreground tracking-tight leading-[0.95] text-balance">
+            Get rewarded for spreading the word.
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground text-balance">
-            Invite friends with your username as your referral code and unlock exclusive rewards.
+          <p className="mt-5 text-base sm:text-lg text-muted-foreground text-pretty">
+            Invite your friends. Climb the list. Unlock exclusive rewards.
           </p>
         </ScrollReveal>
 
