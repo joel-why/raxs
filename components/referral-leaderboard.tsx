@@ -25,15 +25,15 @@ const TIERS: Tier[] = [
   },
   {
     title: "1 referral",
-    subtitle: "Move up 250 spots",
-    badge: "+250",
+    subtitle: "Move up a spot",
+    badge: "+1",
     icon: "users",
     accent: "text-muted-foreground",
     badgeClass: "border border-border bg-secondary text-foreground",
   },
   {
     title: "3 referrals",
-    subtitle: "Early access to Rax$",
+    subtitle: "Early access to Raxs",
     badge: "EARLY ACCESS",
     icon: "users-plus",
     accent: "text-violet-300",
