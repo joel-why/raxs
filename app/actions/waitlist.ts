@@ -2,14 +2,11 @@
 
 import { db } from "@/lib/db"
 import { waitlist } from "@/lib/db/schema"
-import { count, desc, eq, isNotNull } from "drizzle-orm"
-
-// Base count so the displayed number starts at 1749 and counts up from there
-const BASE_COUNT = 1749
+import { count, desc, eq, isNotNull, lte, or } from "drizzle-orm"
 
 export async function getWaitlistCount(): Promise<number> {
   const result = await db.select({ count: count() }).from(waitlist)
-  return BASE_COUNT + (result[0]?.count ?? 0)
+  return result[0]?.count ?? 0
 }
 
 export async function getAllSignups(): Promise<
@@ -26,6 +23,38 @@ export async function getAllSignups(): Promise<
       createdAt: row.createdAt!,
     }))
     .reverse()
+}
+
+export async function getWaitlistPosition(
+  query: string
+): Promise<{ found: boolean; position?: number; total?: number; username?: string | null }> {
+  const normalized = query.trim().toLowerCase().replace(/^@/, "")
+  if (!normalized) return { found: false }
+
+  // Look up by username or email so people can check with either one.
+  // Rank by the serial id (monotonic with signup order) rather than the
+  // timestamp — Postgres stores microseconds but JS Date truncates to ms,
+  // which would drop the row itself from a created_at comparison.
+  const match = await db
+    .select({ id: waitlist.id, username: waitlist.username })
+    .from(waitlist)
+    .where(or(eq(waitlist.username, normalized), eq(waitlist.email, normalized)))
+    .limit(1)
+
+  const entry = match[0]
+  if (!entry) return { found: false }
+
+  // Position is 1-based by signup order: the earliest signup is #1
+  const ahead = await db.select({ count: count() }).from(waitlist).where(lte(waitlist.id, entry.id))
+
+  const total = await getWaitlistCount()
+
+  return {
+    found: true,
+    position: ahead[0]?.count ?? 1,
+    total,
+    username: entry.username,
+  }
 }
 
 export async function getTopReferrers(): Promise<{ username: string; referrals: number }[]> {
