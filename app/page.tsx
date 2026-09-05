@@ -60,7 +60,7 @@ export default function Home() {
             <PhoneShowcase />
           </ScrollReveal>
 
-          <ScrollReveal delay={120} className="w-full max-w-lg mx-auto lg:mx-0">
+          <ScrollReveal delay={120} className="w-full max-w-lg mx-auto lg:mx-0 lg:-mt-8">
             <RaxsProcess />
           </ScrollReveal>
         </div>
