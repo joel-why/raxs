@@ -2,6 +2,7 @@ import { AnimatedLogo } from "@/components/animated-logo"
 import { FlyingMoneyAnimation } from "@/components/flying-money"
 import { Footer } from "@/components/footer"
 import { PhoneShowcase } from "@/components/phone-showcase"
+import { RaxsProcess } from "@/components/raxs-process"
 import { ReferralTiers, TopReferrers } from "@/components/referral-leaderboard"
 import { ReferralShare } from "@/components/referral-share"
 import { ScrollCue } from "@/components/scroll-cue"
@@ -53,20 +54,16 @@ export default function Home() {
       </section>
 
       {/* Section 2 — Showcase */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24">
-        <ScrollReveal className="max-w-2xl text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold uppercase text-foreground tracking-tight leading-[0.95] text-balance">
-            If you bought it, post it.
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground text-balance">
-            Supercars or sneakers. Coffee or Cartier. Every purchase adds to your profile. Verify your purchases
-            to build your Verified Spend, no matter the item.
-          </p>
-        </ScrollReveal>
+      <section className="relative min-h-screen flex items-center justify-center px-6 py-24">
+        <div className="w-full max-w-6xl mx-auto grid gap-12 lg:grid-cols-2 lg:items-start">
+          <ScrollReveal className="flex justify-center lg:justify-start">
+            <PhoneShowcase />
+          </ScrollReveal>
 
-        <ScrollReveal delay={120} className="w-full max-w-md">
-          <PhoneShowcase />
-        </ScrollReveal>
+          <ScrollReveal delay={120} className="w-full max-w-lg mx-auto lg:mx-0 lg:mt-5">
+            <RaxsProcess />
+          </ScrollReveal>
+        </div>
       </section>
 
       {/* Section 3 — Claim your spot */}
