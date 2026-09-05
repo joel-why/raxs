@@ -10,7 +10,7 @@ export function PhoneShowcase() {
       <img
         src="/images/phone-showcase.png"
         alt="Raxs app shown on two iPhones: an Explore feed with trending cars and fashion, and a profile showing verified lifetime spend"
-        className="relative z-10 w-full max-w-[380px] h-auto drop-shadow-2xl"
+        className="relative z-10 w-full max-w-[570px] h-auto drop-shadow-2xl"
       />
     </div>
   )
