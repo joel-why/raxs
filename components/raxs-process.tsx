@@ -16,7 +16,7 @@ const steps = [
   {
     number: "03",
     icon: BarChart3,
-    title: "RAX UP",
+    title: "RAXS UP",
     description: "Build your Verified Spend and collection.",
   },
 ]
@@ -35,7 +35,7 @@ export function RaxsProcess() {
         <br />
         Verify.
         <br />
-        Rax Up.
+        Raxs Up.
       </h2>
 
       <ol className="mt-12 space-y-8">

@@ -55,7 +55,7 @@ export default function Home() {
 
       {/* Section 2 — Showcase */}
       <section className="relative min-h-screen flex items-center justify-center px-6 py-24">
-        <div className="w-full max-w-6xl mx-auto grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div className="w-full max-w-6xl mx-auto grid gap-12 lg:grid-cols-2 lg:items-start">
           <ScrollReveal className="flex justify-center lg:justify-start">
             <PhoneShowcase />
           </ScrollReveal>
