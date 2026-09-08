@@ -9,9 +9,22 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const CODE_TTL_MS = 10 * 60 * 1000 // 10 minutes
 const MAX_ATTEMPTS = 5
 
+// Vanity padding applied to public-facing waitlist numbers only. The database
+// still stores just the real signups; this offset makes the public count and
+// positions start higher, so real signups slot in after the padded block.
+// With this set to 500, the next real signup shows as #(500 + its real rank).
+const WAITLIST_PADDING = 500
+
+// Real number of signups in the database (unpadded). Used internally and by the
+// admin dashboard, which must reflect the true data.
 export async function getWaitlistCount(): Promise<number> {
   const result = await db.select({ count: count() }).from(waitlist)
   return result[0]?.count ?? 0
+}
+
+// Public-facing count: the real count plus the vanity padding.
+export async function getPublicWaitlistCount(): Promise<number> {
+  return (await getWaitlistCount()) + WAITLIST_PADDING
 }
 
 export async function getAllSignups(): Promise<
@@ -91,8 +104,8 @@ export async function getWaitlistPosition(query: string): Promise<{
 
   return {
     found: true,
-    position: index + 1,
-    total: ranked.length,
+    position: WAITLIST_PADDING + index + 1,
+    total: WAITLIST_PADDING + ranked.length,
     username: ranked[index].username,
     referrals: ranked[index].referrals,
   }
@@ -212,7 +225,7 @@ export async function verifyAndJoinWaitlist(
   const normalizedEmail = email.trim().toLowerCase()
   const normalizedCode = code.trim()
 
-  const currentCount = await getWaitlistCount()
+  const currentCount = await getPublicWaitlistCount()
 
   const rows = await db
     .select()
@@ -266,7 +279,7 @@ export async function verifyAndJoinWaitlist(
       referral: record.referral || null,
     })
     await db.delete(verificationCodes).where(eq(verificationCodes.email, normalizedEmail))
-    const newCount = await getWaitlistCount()
+    const newCount = await getPublicWaitlistCount()
     return { success: true, count: newCount }
   } catch (error: unknown) {
     // Handle unique constraint violations (race conditions on email or username)

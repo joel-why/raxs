@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { MoneyConfetti } from "./money-confetti"
-import { getWaitlistCount, requestWaitlistVerification, verifyAndJoinWaitlist } from "@/app/actions/waitlist"
+import { getPublicWaitlistCount, requestWaitlistVerification, verifyAndJoinWaitlist } from "@/app/actions/waitlist"
 
 type Step = "form" | "verify" | "done"
 
@@ -21,7 +21,7 @@ export function WaitlistForm() {
 
   // Fetch the initial count from the database
   useEffect(() => {
-    getWaitlistCount().then(setSignupCount)
+    getPublicWaitlistCount().then(setSignupCount)
   }, [])
 
   // Pre-fill the referral code from a ?ref= share link

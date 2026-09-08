@@ -1,13 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { getWaitlistCount } from "@/app/actions/waitlist"
+import { getPublicWaitlistCount } from "@/app/actions/waitlist"
 
 export function WaitlistCount() {
   const [count, setCount] = useState<number | null>(null)
 
   useEffect(() => {
-    getWaitlistCount().then(setCount)
+    getPublicWaitlistCount().then(setCount)
   }, [])
 
   return (
