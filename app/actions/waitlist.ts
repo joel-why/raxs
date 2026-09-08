@@ -1,8 +1,13 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { waitlist } from "@/lib/db/schema"
+import { verificationCodes, waitlist } from "@/lib/db/schema"
 import { count, desc, eq, isNotNull } from "drizzle-orm"
+import { sendVerificationEmail } from "@/lib/email"
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const CODE_TTL_MS = 10 * 60 * 1000 // 10 minutes
+const MAX_ATTEMPTS = 5
 
 export async function getWaitlistCount(): Promise<number> {
   const result = await db.select({ count: count() }).from(waitlist)
@@ -118,50 +123,154 @@ export async function isUsernameAvailable(username: string): Promise<boolean> {
   return existing.length === 0
 }
 
-export async function joinWaitlist(
-  email: string,
-  username: string,
-  referral: string
-): Promise<{ success: boolean; count: number; error?: string }> {
-  const normalizedUsername = username.trim().toLowerCase()
-  const normalizedReferral = referral.trim().toLowerCase()
+// Shared validation for a would-be signup. Returns an error string when the
+// submission is invalid, or null when it's good to proceed.
+async function validateSignup(
+  normalizedEmail: string,
+  normalizedUsername: string,
+  normalizedReferral: string,
+): Promise<string | null> {
+  if (!EMAIL_REGEX.test(normalizedEmail)) {
+    return "Please enter a valid email address"
+  }
 
   // Validate username format: 3-30 chars, lowercase letters, numbers, periods, underscores
   if (!/^[a-z0-9._]{3,30}$/.test(normalizedUsername)) {
-    const currentCount = await getWaitlistCount()
-    return {
-      success: false,
-      count: currentCount,
-      error: "Usernames must be 3-30 characters: lowercase letters, numbers, periods, or underscores",
-    }
+    return "Usernames must be 3-30 characters: lowercase letters, numbers, periods, or underscores"
   }
 
   // Prevent self-referral: you can't use your own username as your referral code
   if (normalizedReferral && normalizedReferral === normalizedUsername) {
-    const currentCount = await getWaitlistCount()
-    return { success: false, count: currentCount, error: "You can't refer yourself!" }
+    return "You can't refer yourself!"
   }
 
-  // Pre-check so we can return a friendly, specific message before hitting the constraint
+  const existingEmail = await db
+    .select({ id: waitlist.id })
+    .from(waitlist)
+    .where(eq(waitlist.email, normalizedEmail))
+    .limit(1)
+  if (existingEmail.length > 0) {
+    return "This email is already on the waitlist!"
+  }
+
   const available = await isUsernameAvailable(normalizedUsername)
   if (!available) {
-    const currentCount = await getWaitlistCount()
-    return { success: false, count: currentCount, error: `@${normalizedUsername} is already taken. Try another one!` }
+    return `@${normalizedUsername} is already taken. Try another one!`
+  }
+
+  return null
+}
+
+// Step 1: validate the signup, generate a 6-digit code, store the pending
+// signup, and email the code. Nothing is added to the waitlist yet.
+export async function requestWaitlistVerification(
+  email: string,
+  username: string,
+  referral: string,
+): Promise<{ success: boolean; error?: string }> {
+  const normalizedEmail = email.trim().toLowerCase()
+  const normalizedUsername = username.trim().toLowerCase()
+  const normalizedReferral = referral.trim().toLowerCase()
+
+  const validationError = await validateSignup(normalizedEmail, normalizedUsername, normalizedReferral)
+  if (validationError) {
+    return { success: false, error: validationError }
+  }
+
+  const code = String(Math.floor(100000 + Math.random() * 900000))
+  const expiresAt = new Date(Date.now() + CODE_TTL_MS)
+
+  // Upsert: the newest code replaces any prior pending code for this email.
+  await db
+    .insert(verificationCodes)
+    .values({
+      email: normalizedEmail,
+      code,
+      username: normalizedUsername,
+      referral: normalizedReferral || null,
+      attempts: 0,
+      expiresAt,
+    })
+    .onConflictDoUpdate({
+      target: verificationCodes.email,
+      set: { code, username: normalizedUsername, referral: normalizedReferral || null, attempts: 0, expiresAt },
+    })
+
+  const sent = await sendVerificationEmail(normalizedEmail, code)
+  if (!sent.ok) {
+    return { success: false, error: "We couldn't send the verification email. Please try again." }
+  }
+
+  return { success: true }
+}
+
+// Step 2: check the submitted code and, if valid, add the signup to the waitlist.
+export async function verifyAndJoinWaitlist(
+  email: string,
+  code: string,
+): Promise<{ success: boolean; count: number; error?: string }> {
+  const normalizedEmail = email.trim().toLowerCase()
+  const normalizedCode = code.trim()
+
+  const currentCount = await getWaitlistCount()
+
+  const rows = await db
+    .select()
+    .from(verificationCodes)
+    .where(eq(verificationCodes.email, normalizedEmail))
+    .limit(1)
+  const record = rows[0]
+
+  if (!record) {
+    return { success: false, count: currentCount, error: "No pending verification. Please start over." }
+  }
+
+  if (record.expiresAt.getTime() < Date.now()) {
+    await db.delete(verificationCodes).where(eq(verificationCodes.email, normalizedEmail))
+    return { success: false, count: currentCount, error: "This code has expired. Please request a new one." }
+  }
+
+  if (record.attempts >= MAX_ATTEMPTS) {
+    await db.delete(verificationCodes).where(eq(verificationCodes.email, normalizedEmail))
+    return { success: false, count: currentCount, error: "Too many attempts. Please request a new code." }
+  }
+
+  if (record.code !== normalizedCode) {
+    await db
+      .update(verificationCodes)
+      .set({ attempts: record.attempts + 1 })
+      .where(eq(verificationCodes.email, normalizedEmail))
+    const remaining = MAX_ATTEMPTS - (record.attempts + 1)
+    return {
+      success: false,
+      count: currentCount,
+      error: remaining > 0 ? `Incorrect code. ${remaining} attempt${remaining === 1 ? "" : "s"} left.` : "Too many attempts. Please request a new code.",
+    }
+  }
+
+  const normalizedUsername = (record.username ?? "").toLowerCase()
+
+  // Re-validate in case the username was claimed by someone else while the
+  // code was outstanding, or the email got added another way.
+  const validationError = await validateSignup(normalizedEmail, normalizedUsername, (record.referral ?? "").toLowerCase())
+  if (validationError) {
+    await db.delete(verificationCodes).where(eq(verificationCodes.email, normalizedEmail))
+    return { success: false, count: currentCount, error: validationError }
   }
 
   try {
     await db.insert(waitlist).values({
       name: "",
-      email,
+      email: normalizedEmail,
       username: normalizedUsername,
-      referral: normalizedReferral || null,
+      referral: record.referral || null,
     })
+    await db.delete(verificationCodes).where(eq(verificationCodes.email, normalizedEmail))
     const newCount = await getWaitlistCount()
     return { success: true, count: newCount }
   } catch (error: unknown) {
     // Handle unique constraint violations (race conditions on email or username)
     if (error instanceof Error && error.message.includes("unique")) {
-      const currentCount = await getWaitlistCount()
       if (error.message.includes("username")) {
         return { success: false, count: currentCount, error: `@${normalizedUsername} is already taken. Try another one!` }
       }
