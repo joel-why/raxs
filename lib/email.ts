@@ -6,8 +6,8 @@ const resend = new Resend(process.env.API_KEY)
 
 // Sender for waitlist emails. Uses RESEND_FROM_EMAIL only when it's a valid
 // address (it must be on a domain verified in Resend); otherwise falls back to
-// the verified waitlist@raxs.com sender.
-const DEFAULT_FROM = "Raxs <waitlist@raxs.com>"
+// the verified waitlist@raxs.app sender.
+const DEFAULT_FROM = "Raxs <waitlist@raxs.app>"
 const envFrom = process.env.RESEND_FROM_EMAIL ?? ""
 const FROM = /^(?:.+<)?[^\s@]+@[^\s@]+\.[^\s@]+>?$/.test(envFrom) ? envFrom : DEFAULT_FROM
 
