@@ -4,7 +4,12 @@ import { Resend } from "resend"
 // The Resend API key is provisioned under the API_KEY env var for this project.
 const resend = new Resend(process.env.API_KEY)
 
-const FROM = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev"
+// Sender for waitlist emails. Uses RESEND_FROM_EMAIL only when it's a valid
+// address (it must be on a domain verified in Resend); otherwise falls back to
+// the verified waitlist@raxs.com sender.
+const DEFAULT_FROM = "Raxs <waitlist@raxs.com>"
+const envFrom = process.env.RESEND_FROM_EMAIL ?? ""
+const FROM = /^(?:.+<)?[^\s@]+@[^\s@]+\.[^\s@]+>?$/.test(envFrom) ? envFrom : DEFAULT_FROM
 
 export async function sendVerificationEmail(email: string, code: string): Promise<{ ok: boolean; error?: string }> {
   const { error } = await resend.emails.send(
