@@ -9,12 +9,34 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://raxs.app'),
   title: 'Raxs | Join the Waitlist',
   description: 'Be the first to know when we launch. Sign up for our waitlist and join the movement.',
   generator: 'v0.app',
   icons: {
     icon: '/favicon.png',
     apple: '/favicon.png',
+  },
+  openGraph: {
+    title: 'Raxs | Prove What You Own',
+    description: 'Be the first to know when we launch. Sign up for our waitlist and join the movement.',
+    url: 'https://raxs.app',
+    siteName: 'Raxs',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Raxs — Prove What You Own. Join the waitlist.',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Raxs | Prove What You Own',
+    description: 'Be the first to know when we launch. Sign up for our waitlist and join the movement.',
+    images: ['/og-image.png'],
   },
 }
 
